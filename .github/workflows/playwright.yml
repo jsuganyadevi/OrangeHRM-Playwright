@@ -26,7 +26,7 @@ jobs:
 
       - name: Run Playwright tests
         env:
-          BASE_URL: ${{ vars.BASE_URL }}
+          BASE_URL: https://opensource-demo.orangehrmlive.com/
           ORANGE_USERNAME: ${{ secrets.ORANGE_USERNAME }}
           ORANGE_PASSWORD: ${{ secrets.ORANGE_PASSWORD }}
         run: npx playwright test
