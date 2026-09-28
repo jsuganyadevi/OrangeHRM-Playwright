@@ -1,6 +1,6 @@
-import {Page,Locator,expect} from '@playwright/test';
+import { Page, Locator, expect } from '@playwright/test';
 
-export class EmployeeDetailsPage{
+export class EmployeeDetailsPage {
     readonly page: Page;
 
     readonly successMessage: Locator;
@@ -38,18 +38,16 @@ export class EmployeeDetailsPage{
         lastName: string,
         employeeId: string
     ) {
-        await expect(this.personalDetailsHeading).toBeVisible({
-            timeout: 15000
-        });
+        await expect(this.personalDetailsHeading).toBeVisible();
 
         await expect(this.firstNameInput).toHaveValue(firstName);
 
         await expect(this.lastNameInput).toHaveValue(lastName);
 
         await expect(this.employeeIdInput).toHaveValue(employeeId);
-    } 
+    }
 
-        async verifyEmployeeDetailsUrl() {
+    async verifyEmployeeDetailsUrl() {
         await expect(this.page).toHaveURL(
             /\/pim\/viewPersonalDetails\/empNumber\/\d+$/
         );

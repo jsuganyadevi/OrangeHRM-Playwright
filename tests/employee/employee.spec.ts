@@ -7,6 +7,10 @@ let employeeCreated = false;
 test.afterEach(async ({ page, employeeList }, testInfo,) => {
     try {
         // Cleanup only when the test fails
+        // Cleanup could be handled via API for faster execution,
+        // but this assignment requires UI-based employee deletion,
+        // so cleanup is intentionally kept through the UI for simplicity.
+
         if (testInfo.status === testInfo.expectedStatus || !employeeId) {
             return;
         }
