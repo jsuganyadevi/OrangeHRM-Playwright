@@ -5,8 +5,10 @@ import { PIMPage } from '../pages/PIMPage';
 import { EmployeeForm } from '../components/EmployeeForm';
 import { EmployeeDetailsPage } from '../pages/EmployeeDetailsPage';
 import { EmployeeList } from '../components/EmployeeList';
+import { LoginPage } from '../pages/LoginPage';
 
 type Fixtures = {
+    loginPage: LoginPage;
     dashboardPage: DashboardPage;
     pimPage: PIMPage;
     employeeForm: EmployeeForm;
@@ -15,6 +17,11 @@ type Fixtures = {
 };
 
 export const test = base.extend<Fixtures>({
+
+    loginPage: async ({ page }, use) => {
+        await use(new LoginPage(page));
+    },
+
     dashboardPage: async ({ page }, use) => {
         await use(new DashboardPage(page));
     },

@@ -1,10 +1,10 @@
-import { test as setup, expect } from '@playwright/test';
-import { LoginPage } from '../pages/LoginPage';
+import { expect, test as setup } from '../fixtures/testFixtures';
+
 
 const authFile = 'playwright/.auth/admin.json';
 
-setup('authenticate', async ({ page }) => {
-    const loginPage = new LoginPage(page);
+setup('authenticate', async ({ loginPage, page }) => {
+
     const username = process.env.ORANGE_USERNAME;
     const password = process.env.ORANGE_PASSWORD;
 
