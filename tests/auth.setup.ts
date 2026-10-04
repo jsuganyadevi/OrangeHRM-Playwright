@@ -1,4 +1,5 @@
 import { expect, test as setup } from '../fixtures/testFixtures';
+import { Logger } from '../utils/Logger';
 
 
 const authFile = 'playwright/.auth/admin.json';
@@ -10,7 +11,7 @@ setup('authenticate', async ({ loginPage, page }) => {
 
     if (!username || !password) {
         throw new Error(
-            'ORANGE_USERNAME and ORANGE_PASSWORD must be defined in .env'
+            'ORANGE_USERNAME and ORANGE_PASSWORD must be set as environment variables'
         );
     }
 
@@ -22,10 +23,10 @@ setup('authenticate', async ({ loginPage, page }) => {
     );
 
     await expect(page.getByRole('heading', { name: 'Dashboard' })).toBeVisible();
+    Logger.info('Authentication succeeded; Dashboard is visible.');
 
-    await page.context().storageState({
-        path: authFile
-    })
+    await Logger.operation('save the authenticated browser state', () =>
+        page.context().storageState({ path: authFile })
+    );
 
 });
-

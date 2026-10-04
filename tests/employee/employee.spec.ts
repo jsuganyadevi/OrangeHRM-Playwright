@@ -98,6 +98,3 @@ test('Verify complete employee workflow', async ({
 
     await employeeList.verifyEmployeeDeleted();
 });
-
-
-

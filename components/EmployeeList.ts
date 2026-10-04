@@ -1,4 +1,5 @@
 import { Page, Locator, expect } from '@playwright/test';
+import { Logger } from '../utils/Logger';
 
 export class EmployeeList {
     readonly page: Page;
@@ -42,12 +43,16 @@ export class EmployeeList {
     }
 
     async searchEmployee(employeeId: string) {
-        await this.employeeIdInput.fill(employeeId);
-        await this.searchButton.click();
+        await Logger.operation('search for an employee by ID', async () => {
+            await this.employeeIdInput.fill(employeeId);
+            await this.searchButton.click();
+        });
     }
 
     async verifyEmployeeFound() {
-        await expect(this.recordFound).toBeVisible();
+        await Logger.operation('verify that an employee search result was found', () =>
+            expect(this.recordFound).toBeVisible()
+        );
     }
 
     async verifyEmployee(
@@ -61,7 +66,9 @@ export class EmployeeList {
             lastName
         );
 
-        await expect(employeeRow).toBeVisible();
+        await Logger.operation('verify the employee appears in search results', () =>
+            expect(employeeRow).toBeVisible()
+        );
     }
 
     async deleteEmployee(
@@ -75,20 +82,24 @@ export class EmployeeList {
             lastName
         );
 
-        await employeeRow
-            .locator('button')
-            .filter({ has: this.page.locator('i.bi-trash') })
-            .click();
-        await this.confirmDeleteButton.click();
+        await Logger.operation('delete the employee record', async () => {
+            await employeeRow
+                .locator('button')
+                .filter({ has: this.page.locator('i.bi-trash') })
+                .click();
+            await this.confirmDeleteButton.click();
+        });
 
     }
 
     async verifyEmployeeDeleted() {
-        await expect(
-            this.page.locator('span').filter({
-                hasText: /^No Records Found$/
-            })
-        ).toBeVisible();
+        await Logger.operation('verify that the employee was deleted', () =>
+            expect(
+                this.page.locator('span').filter({
+                    hasText: /^No Records Found$/
+                })
+            ).toBeVisible()
+        );
     }
 
     async cleanupEmployee(
@@ -96,7 +107,7 @@ export class EmployeeList {
         firstName: string,
         lastName: string
     ) {
-        try {
+        await Logger.operation('remove the employee created by a failed test', async () => {
             await this.employeeIdInput.fill(employeeId);
             await this.searchButton.click();
 
@@ -107,6 +118,7 @@ export class EmployeeList {
             );
 
             if (await employeeRow.count() === 0) {
+                Logger.warn('Failure cleanup found no matching employee to remove.');
                 return;
             }
 
@@ -116,10 +128,7 @@ export class EmployeeList {
                 .click();
 
             await this.confirmDeleteButton.click();
-
-        } catch (error) {
-            console.log('Cleanup could not delete employee:', error);
-        }
+        });
     }
 
 }

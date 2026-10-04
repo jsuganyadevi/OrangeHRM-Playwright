@@ -1,4 +1,5 @@
 import {Page,Locator,expect} from '@playwright/test';
+import { Logger } from '../utils/Logger';
 
 export class PIMPage{
     readonly page : Page;
@@ -14,11 +15,15 @@ export class PIMPage{
     }
 
     async verifyPIMPage() {
-        await expect(this.pimHeading).toBeVisible();
+        await Logger.operation('verify the PIM page is displayed', () =>
+            expect(this.pimHeading).toBeVisible()
+        );
     }
    
     async navigateToAddEmployee() {
-        await this.addButton.click();
+        await Logger.operation('open the Add Employee form', () =>
+            this.addButton.click()
+        );
     }
     
 }

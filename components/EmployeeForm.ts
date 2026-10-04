@@ -1,4 +1,5 @@
 import {Page,Locator} from '@playwright/test';
+import { Logger } from '../utils/Logger';
 
 export class EmployeeForm{
      readonly page: Page;
@@ -35,17 +36,24 @@ export class EmployeeForm{
         middleName: string,
         lastName: string
     ) {
-        await this.firstNameInput.fill(firstName);
-        await this.middleNameInput.fill(middleName);
-        await this.lastNameInput.fill(lastName);
+        await Logger.operation('enter employee details', async () => {
+            await this.firstNameInput.fill(firstName);
+            await this.middleNameInput.fill(middleName);
+            await this.lastNameInput.fill(lastName);
+        });
     }
 
     async getEmployeeID():Promise<string>{
-         return await this.employeeIdInput.inputValue();
+        return Logger.operation(
+            'read the generated employee ID',
+            () => this.employeeIdInput.inputValue()
+        );
     }
 
     async saveEmployee() {
-        await this.saveButton.click();
+        await Logger.operation('save the employee record', () =>
+            this.saveButton.click()
+        );
     }
 
 }

@@ -1,4 +1,5 @@
 import { Page, Locator, expect } from '@playwright/test';
+import { Logger } from '../utils/Logger';
 
 export class EmployeeDetailsPage {
     readonly page: Page;
@@ -30,7 +31,9 @@ export class EmployeeDetailsPage {
     }
 
     async verifySuccessMessage() {
-        await expect(this.successMessage).toBeVisible();
+        await Logger.operation('verify the employee save confirmation', () =>
+            expect(this.successMessage).toBeVisible()
+        );
     }
 
     async verifyEmployeeDetails(
@@ -38,18 +41,19 @@ export class EmployeeDetailsPage {
         lastName: string,
         employeeId: string
     ) {
-        await expect(this.personalDetailsHeading).toBeVisible();
-
-        await expect(this.firstNameInput).toHaveValue(firstName);
-
-        await expect(this.lastNameInput).toHaveValue(lastName);
-
-        await expect(this.employeeIdInput).toHaveValue(employeeId);
+        await Logger.operation('verify the saved employee details', async () => {
+            await expect(this.personalDetailsHeading).toBeVisible();
+            await expect(this.firstNameInput).toHaveValue(firstName);
+            await expect(this.lastNameInput).toHaveValue(lastName);
+            await expect(this.employeeIdInput).toHaveValue(employeeId);
+        });
     }
 
     async verifyEmployeeDetailsUrl() {
-        await expect(this.page).toHaveURL(
-            /\/pim\/viewPersonalDetails\/empNumber\/\d+$/
+        await Logger.operation('verify navigation to employee details', () =>
+            expect(this.page).toHaveURL(
+                /\/pim\/viewPersonalDetails\/empNumber\/\d+$/
+            )
         );
     }
 

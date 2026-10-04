@@ -52,6 +52,22 @@ OrangeHRM-Playwright/
 ### Fixtures
 `fixtures/testFixtures.ts` creates reusable Page Object and component instances so tests focus on business workflow.
 
+### Logging
+
+`utils/Logger.ts` provides centralized framework logging with timestamped, leveled messages written to both the console and `logs/test.log`.
+
+- Supports `INFO`, `WARN`, `ERROR`, and `DEBUG` log levels.
+- Playwright test lifecycle entries include the test project, worker, and retry information to make parallel execution and failures easier to diagnose.
+- Page objects and components log business-level actions rather than low-level locator operations.
+- Sensitive information such as usernames, passwords, tokens, and entered field values is not written to logs.
+- `Logger.operation()` provides a reusable wrapper for asynchronous framework operations:
+  - Logs `Starting` when an operation begins.
+  - Logs `Completed` when the operation succeeds.
+  - Logs `Failed` when the operation throws an error.
+  - Rethrows the original error so Playwright can still report the actual test failure.
+- The same operation wrapper is used across page objects, components, authentication setup, and test-level workflows to provide consistent logging without duplicating try/catch logic.
+- Log file creation is handled automatically, and `logs/` is excluded from Git through `.gitignore`.
+
 ### Test Data
 `test-data/employeeData.ts` keeps employee input data separate from test logic. Employee test data uses a unique last name per execution.
 

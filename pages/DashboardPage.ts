@@ -1,4 +1,5 @@
 import { Page, Locator, expect } from '@playwright/test';
+import { Logger } from '../utils/Logger';
 
 export class DashboardPage {
     readonly page: Page;
@@ -12,11 +13,15 @@ export class DashboardPage {
     }
 
     async verifyDashboard() {
-        await expect(this.dashboardHeading).toBeVisible();
+        await Logger.operation('verify the Dashboard is displayed', () =>
+            expect(this.dashboardHeading).toBeVisible()
+        );
     }
 
     async navigateToPIM() {
-        await this.pimMenu.click();
+        await Logger.operation('navigate to the PIM module', () =>
+            this.pimMenu.click()
+        );
     }
 
 }
