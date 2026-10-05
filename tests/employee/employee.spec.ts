@@ -1,5 +1,5 @@
 import { expect, test } from '../../fixtures/testFixtures';
-import { employeeData } from '../../test-data/employeeData';
+import { employeeData, createUniqueEmployeeId } from '../../test-data/employeeData';
 
 let employeeId = '';
 let employeeCreated = false;
@@ -11,7 +11,7 @@ test.afterEach(async ({ page, employeeList }, testInfo,) => {
         // but this assignment requires UI-based employee deletion,
         // so cleanup is intentionally kept through the UI for simplicity.
 
-        if (testInfo.status === testInfo.expectedStatus || !employeeId) {
+        if (testInfo.status === testInfo.expectedStatus || !employeeCreated) {
             return;
         }
 
@@ -64,11 +64,17 @@ test('Verify complete employee workflow', async ({
         employeeData.lastName
     );
 
-    employeeId = await employeeForm.getEmployeeID();
+    const generatedEmployeeId = await employeeForm.getEmployeeID();
+
+    employeeId = createUniqueEmployeeId(generatedEmployeeId);
+
+    await employeeForm.setEmployeeID(employeeId);
 
     await employeeForm.saveEmployee();
 
     await employeeDetailsPage.verifySuccessMessage();
+
+    employeeCreated = true;
 
     await employeeDetailsPage.verifyEmployeeDetailsUrl();
 

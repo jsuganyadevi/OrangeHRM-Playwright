@@ -1,8 +1,8 @@
-import {Page,Locator} from '@playwright/test';
+import { Page, Locator } from '@playwright/test';
 import { Logger } from '../utils/Logger';
 
-export class EmployeeForm{
-     readonly page: Page;
+export class EmployeeForm {
+    readonly page: Page;
     readonly firstNameInput: Locator;
     readonly middleNameInput: Locator;
     readonly lastNameInput: Locator;
@@ -43,7 +43,13 @@ export class EmployeeForm{
         });
     }
 
-    async getEmployeeID():Promise<string>{
+    async setEmployeeID(employeeId: string) {
+        await Logger.operation('set a unique employee ID', () =>
+            this.employeeIdInput.fill(employeeId)
+        );
+    }
+
+    async getEmployeeID() {
         return Logger.operation(
             'read the generated employee ID',
             () => this.employeeIdInput.inputValue()
